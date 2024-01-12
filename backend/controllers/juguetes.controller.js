@@ -54,7 +54,7 @@ jugueteCtrl.deleteJuguete = async (req,res) =>{
     await JugueteModel.findByIdAndDelete(req.params.id)
         // Si todo funciona correctamente devolvemos en formato Json el mensaje y borramos
         .then((data) =>{
-            if(data!=null) res.json({satus: 'Juguete borrado de la bbdd'},data)
+            if(data!=null) res.json({status: 'Juguete borrado de la bbdd'},data)
             else res.json({status: 'El juguete no existe en la bbdd'})
         })
         // Si no funciona de forma correcta mandamos el mensaje de error.
