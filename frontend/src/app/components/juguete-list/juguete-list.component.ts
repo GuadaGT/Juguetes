@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {Juguete} from "../../common/juguete";
 import {JugueteService} from "../../services/juguete.service";
-import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {faCirclePlus, faCircleXmark, faTrashCan} from "@fortawesome/free-solid-svg-icons";
+import {FormValidators} from "../../validators/validaciones";
 
 
 @Component({
@@ -17,10 +18,19 @@ export class JugueteListComponent implements OnInit {
     {
       _id: [''],
       __v: [0],
-      nombre: [''],
-      edad_minima: [''],
-      precio: [''],
-      categoria: [''],
+      nombre: ['', [Validators.minLength(1),
+        Validators.required,
+        FormValidators.notOnlyWhiteSpace]],
+      edad_minima: ['',[Validators.required,
+        Validators.min(0),
+        Validators.max(18)
+      ]],
+      precio: ['',[Validators.required,
+        Validators.min(0)]],
+      categoria: ['', [Validators.required,
+        Validators.minLength(2),
+        Validators.maxLength(50),
+        FormValidators.notOnlyWhiteSpace]],
       imagen: ['']
     }
   );
@@ -38,27 +48,27 @@ export class JugueteListComponent implements OnInit {
 
   // Getters del formulario.
   get nombre(): any {
-    return this.formJuguete.get('nombre')?.value;
+    return this.formJuguete.get('nombre');
   }
 
   get edad_minima(): any {
-    return this.formJuguete.get('edad_minima')?.value;
+    return this.formJuguete.get('edad_minima');
   }
 
   get precio(): any {
-    return this.formJuguete.get('precio')?.value;
+    return this.formJuguete.get('precio');
   }
 
   get categoriaF(): any {
-    return this.formJuguete.get('categoriaF')?.value;
+    return this.formJuguete.get('categoriaF');
   }
 
   get imagen(): any {
-    return this.formJuguete.get('imagen')?.value;
+    return this.formJuguete.get('imagen');
   }
 
   get newCategoria(): any {
-    return this.formJuguete.get('newCategoria')?.value;
+    return this.mynewCategoria.get('newCategoria');
   }
 
   ngOnInit(): void {
@@ -148,8 +158,7 @@ export class JugueteListComponent implements OnInit {
     let newCategorias;
     if (!this.editar) this.categoria.push(newCategoria)
     else {
-      newCategorias = this.formJuguete.getRawValue().categoria;
-      newCategorias.push(newCategoria);
+      newCategorias =newCategoria;
       this.categoria.push(newCategoria);
       this.formJuguete.setControl('genres', new FormControl(newCategorias)
       );

@@ -1,0 +1,16 @@
+img{
+  width: 100px;
+}
+.border{
+  box-shadow: 2px 2px lightgrey;
+}
+.row:hover, .pointer:hover{
+  cursor: pointer;
+}
+h3 fa-icon{
+  color: limegreen;
+}
+
+h4 fa-icon{
+  color: red;
+}

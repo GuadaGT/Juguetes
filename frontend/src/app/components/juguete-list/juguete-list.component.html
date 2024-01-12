@@ -1,18 +1,15 @@
-<div class="container-fluid">
-
+<div class="containter-fluid">
   <div class="w-100 d-flex">
     <h3 class="mt-2 d-inline-block me-auto">{{juguetes.length}}
-      películas</h3>
+      Juguetes</h3>
     <h3 *ngIf="juguetes.length > 0" class="d-inline-block ms-auto pointer"
-        (click)="newJuguete()"
-        data-bs-toggle="modal"
-        data-bs-target="#miModal"> Add juguete
+        (click)="newJuguete()" data-bs-toggle="modal"
+        data-bs-target="#miModal"> Add Juguete
       <fa-icon [icon]="faCirclePlus"></fa-icon>
     </h3>
     <h3 *ngIf="juguetes.length == 0" class="d-inline-block ms-auto pointer"
-        (click)="newJuguete()"
-        data-bs-toggle="modal"
-        data-bs-target="#miModalZero"> Add juguete
+        (click)="newJuguete()" data-bs-toggle="modal"
+        data-bs-target="#miModalZero"> Add Juguete
       <fa-icon [icon]="faCirclePlus"></fa-icon>
     </h3>
   </div>
@@ -25,29 +22,23 @@
                data-bs-target="#miModal" class="row mt-3 pt-2">
             <div class="col-md-2">
               <img src="{{juguete.imagen ||
-             'assets/images/no-image-icon.jpg'}}" alt="{{juguete.nombre}}">
+              'assets/images/Not_found.JPG'}}" alt="{{juguete.nombre}}">
             </div>
             <div class="col-md-9">
               <h5>{{juguete.nombre}}</h5>
-              <small class="text-danger">{{juguete.categoria}}</small>
-              <p><b>Director</b>: {{juguete.director}} - <b>Year</b>:
-                {{juguete.year}}</p>
-              <small>{{juguete.plot}}</small>
+              <small class="text-primary">{{juguete.categoria}}</small>
+              <p><b>Precio (€)</b>: {{juguete.precio}}</p>
+              <p><b>Edad mínima</b>: {{juguete.edad_minima}}</p>
+              <div class="pb-2"></div>
             </div>
-            <div class="col-md-1 align-self-center align-middle">
-              <small class="badge bg-success p-3">{{juguete.imdb.rating}}</small>
-            </div>
-            <div class="pb-2"></div>
           </div>
         </div>
 
         <div class="col-md-1 remove d-flex">
-          <h3 class="ms-auto align-self-center">
-            <fa-icon [icon]="faCircleXmark" (click)="deleteJuguete(juguete)"></fa-icon>
-          </h3>
+          <h4 class="ms-auto align-self-center">
+            <fa-icon [icon]="faTrashCan"  (click)="removeJuguete(juguete)"></fa-icon></h4>
         </div>
       </div>
-
       <div class="mb-2"></div>
 
       <!-- Fin del NgFor -->
@@ -58,137 +49,144 @@
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-nombre" id="miModalLabel">
-                {{editar?nombre:'New juguete'}}</h5>
-              <button type="button"
-                      class="btn-close"
-                      data-bs-dismiss="modal"
-                      aria-label="Close"></button>
+              <h5 class="modal-title" id="miModalLabel">
+                {{editar?nombre:'New Juguete'}}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
+              <!--Aquí se inicia todo el formulario-->
             </div>
             <form [formGroup]="formJuguete" (ngSubmit)="onSubmit()">
               <div class="modal-body">
                 <div class="form-floating mb-3">
+                  <!-- Indicamos con el formcontrolname el atributo a incluir-->
+                  <!-- Nombre -->
                   <input formControlName="nombre"
                          type="text" class="form-control"
                          id="nombre" value="{{nombre}}"
-                         placeholder="nombre">
-                  <label for="nombre">
-                    nombre</label>
+                         placeholder="Nombre">
+                  <label for="nombre">Nombre</label>
+                  <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)"
+                       class="alert alert-warning"
+                       role="alert">
+                    <div *ngIf="nombre.errors?.['required'] || nombre.errors?.['notOnlyWhiteSpace']">
+                      El nombre es obligatorio.
+                    </div>
+                    <div *ngIf="nombre.errors?.['minlength']">
+                      Mínimo 1 carácter
+                    </div>
+                  </div>
                 </div>
+                <!-- Precio -->
                 <div class="form-floating mb-3">
-                  <input formControlName="year"
+                  <input formControlName="precio"
                          type="number" class="form-control"
-                         id="year" value="{{year}}"
-                         placeholder="Year">
-                  <label for="year">
-                    Year</label>
+                         id="precio" value="{{precio}}"
+                         placeholder="Precio">
+                  <label for="precio">Precio</label>
+                  <div *ngIf="precio.invalid && (precio.dirty || precio.touched)"
+                       class="alert alert-warning"
+                       role="alert">
+                    <div *ngIf="precio.errors?.['required']">
+                      El precio es obligatorio.
+                    </div>
+                    <div *ngIf="nombre.errors?.['min']">
+                      Valor mínimo 0
+                    </div>
+                  </div>
                 </div>
+                <!-- Edad mínima -->
                 <div class="form-floating mb-3">
-                  <input formControlName="director"
-                         type="text" class="form-control"
-                         id="director" value="{{director}}"
-                         placeholder="Director">
-                  <label for="director">
-                    Director</label>
+                  <input formControlName="edad_minima"
+                         type="number" class="form-control"
+                         id="edad_minima" value="{{edad_minima}}"
+                         placeholder="Edad_minima">
+                  <label for="edad_minima">Edad mínima</label>
+                  <div *ngIf="edad_minima.invalid && (edad_minima.dirty || edad_minima.touched)"
+                       class="alert alert-warning"
+                       role="alert">
+                    <div *ngIf="edad_minima.errors?.['required']">
+                      La edad es obligatoria.
+                    </div>
+                    <div *ngIf="edad_minima.errors?.['min']">
+                      La edad mínima es de 0 años.
+                    </div>
+                    <div *ngIf="edad_minima.errors?.['max']">
+                      La edad máxima es de 18 años.
+                    </div>
+                  </div>
                 </div>
+                <!-- Categoria -->
                 <div class="row">
                   <div class="col-8">
                     <div class="form-floating mb-3">
                       <input formControlName="imagen"
                              type="text" class="form-control"
                              id="imagen" value="{{imagen}}"
-                             placeholder="imagen">
-                      <label for="imagen">
-                        imagen</label>
+                             placeholder="Imagen">
+                      <label for="imagen">Imagen</label>
                     </div>
-
+                    <!-- Previsualizador de la imagen introducida -->
                   </div>
                   <div class="col-4">
-                    <img src="{{imagen || 'assets/images/no-image-icon.jpg'}}"
-                         alt="...">
+                    <img src="{{imagen?.value || 'assets/images/Not_found.JPG'}}" alt="...">
                   </div>
                 </div>
-                <div class="form-floating mb-3 mt-3">
-<textarea formControlName="plot"
 
-          rows="7"
-          class="form-control"
-          id="plot" value="{{plot}}">
-
-</textarea>
-                  <label for="plot">
-                    Plot</label>
-                </div>
-                <!-- select categoria -->
+                <!-- Seleccionar categoria -->
                 <div *ngIf="editar">
-                  <label for="Select">Genres</label>
+                  <label for="Select">Categoria</label>
                   <select class="form-select" id="Select"
-                          aria-label="Genres" multiple
+                          aria-label="Categoria"
                           formControlName="categoria">
-                    <option *ngFor="let gen of categoria"
-                            [value]="gen">
-                      {{gen}}</option>
+                    <option *ngFor="let cat of categoria" [value]="cat">{{cat}}</option>
                   </select>
                 </div>
                 <div *ngIf="!editar">
-                  <label for="newSelect">Genres</label>
+                  <label for="newSelect">Categoria</label>
                   <select class="form-select" id="newSelect"
-                          aria-label="Genres" multiple
+                          aria-label="Categoria"
                           formControlName="categoria">
-                    <option *ngFor="let gen of categoria"
-                            [value]="gen">
-                      {{gen}}</option>
+                    <option *ngFor="let cat of categoria" [value]="cat">{{cat}}</option>
                   </select>
                 </div>
 
-                <!-- Add New Genre -->
+                <!-- Añadir categoria -->
                 <div class="row mt-3">
                   <div class="col-8">
                     <div [formGroup]="mynewCategoria" class="form-floating mb-3">
                       <input
                         type="text" class="form-control"
-                        id="newGenre"
-                        formControlName="newGenre"
-                        placeholder="New Genre">
-                      <label for="newGenre">
-                        New Genre</label>
+                        id="newCategoria"
+                        formControlName="newCategoria"
+                        placeholder="New Categoria">
+                      <label for="newCategoria">Nueva categoria</label>
+                      <div *ngIf="newCategoria.invalid && (newCategoria.dirty || newCategoria.touched)"
+                           class="alert alert-warning"
+                           role="alert">
+                        <div *ngIf="newCategoria.errors?.['required'] || newCategoria.errors?.['notOnlyWhiteSpace']">
+                          El nombre es obligatorio.
+                        </div>
+                        <div *ngIf="newCategoria.errors?.['minlength']">
+                          Mínimo 2 carácteres
+                        </div>
+                        <div *ngIf="newCategoria.errors?.['maxlength']">
+                          Máximo 50 carácteres
+                        </div>
+                      </div>
                     </div>
-
+                    <!-- Click para añadir nueva categoria de juguetes -->
                   </div>
                   <div class="col-4 pt-2">
-                    <h3>
-                      <fa-icon [icon]="faCirclePlus" (click)="addNewCategoria(newCategoria)"></fa-icon>
-                    </h3>
-
+                    <h3><fa-icon [icon]="faCirclePlus" (click)="addNewCategoria(newCategoria?.value)"></fa-icon></h3>
                   </div>
                 </div>
-
-                <fieldset formGroupName="imdb">
-                  <legend>IMDB</legend>
-                  <div class="form-floating mb-3">
-                    <input formControlName="rating"
-                           type="number" class="form-control"
-                           id="rating" value="{{rating}}"
-                           placeholder="Rating">
-                    <label for="rating">
-                      Rating</label>
-                  </div>
-                  <div class="form-floating mb-3">
-                    <input formControlName="votes"
-                           type="number" class="form-control"
-                           id="votes" value="{{votes}}"
-                           placeholder="Votes">
-                    <label for="votes">
-                      Votes</label>
-                  </div>
-                </fieldset>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary"
-                        data-bs-dismiss="modal">Close</button>
+                        data-bs-dismiss="modal">Cerrar</button>
                 <button type="submit" class="btn btn-primary"
-                        data-bs-dismiss="modal">Save changes</button>
+                        [disabled]="formJuguete.invalid"
+                        data-bs-dismiss="modal">Guardar Cambios</button>
               </div>
             </form>
           </div>
@@ -196,6 +194,8 @@
       </div>
     </div>
   </div>
+
+  <!-- Añadir -->
   <div *ngIf="juguetes.length == 0">
     <div class="modal fade" id="miModalZero"
          tabindex="-1" aria-labelledby="miModalLabelZero"
@@ -203,13 +203,9 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-nombre" id="miModalLabelZero">
-              {{editar?nombre:'New juguete'}}</h5>
-            <button type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"></button>
-
+            <h5 class="modal-title" id="miModalLabelZero">
+              {{editar?juguetes:'New Juguete'}}</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <form [formGroup]="formJuguete" (ngSubmit)="onSubmit()">
             <div class="modal-body">
@@ -217,25 +213,55 @@
                 <input formControlName="nombre"
                        type="text" class="form-control"
                        id="nombreZ" value="{{nombre}}"
-                       placeholder="nombre">
-                <label for="nombreZ">
-                  nombre</label>
+                       placeholder="Nombre">
+                <label for="nombreZ">Nombre</label>
+                <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)"
+                     class="alert alert-warning"
+                     role="alert">
+                  <div *ngIf="nombre.errors?.['required'] || nombre.errors?.['notOnlyWhiteSpace']">
+                    El nombre es obligatorio.
+                  </div>
+                  <div *ngIf="nombre.errors?.['minlength']">
+                    Mínimo 1 carácter
+                  </div>
+                </div>
               </div>
               <div class="form-floating mb-3">
-                <input formControlName="year"
+                <input formControlName="precio"
                        type="number" class="form-control"
-                       id="yearZ" value="{{year}}"
-                       placeholder="Year">
-                <label for="yearZ">
-                  Year</label>
+                       id="precioZ" value="{{precio}}"
+                       placeholder="Precio">
+                <label for="precioZ">Precio</label>
+                <div *ngIf="precio.invalid && (precio.dirty || precio.touched)"
+                     class="alert alert-warning"
+                     role="alert">
+                  <div *ngIf="precio.errors?.['required']">
+                    El precio es obligatorio.
+                  </div>
+                  <div *ngIf="nombre.errors?.['min']">
+                    Valor mínimo 0
+                  </div>
+                </div>
               </div>
               <div class="form-floating mb-3">
-                <input formControlName="director"
-                       type="text" class="form-control"
-                       id="directorZ" value="{{director}}"
-                       placeholder="Director">
-                <label for="directorZ">
-                  Director</label>
+                <input formControlName="edad_minima"
+                       type="number" class="form-control"
+                       id="edad_minimaZ" value="{{edad_minima}}"
+                       placeholder="Edad_minima">
+                <label for="edad_minimaZ">Edad mínima</label>
+                <div *ngIf="edad_minima.invalid && (edad_minima.dirty || edad_minima.touched)"
+                     class="alert alert-warning"
+                     role="alert">
+                  <div *ngIf="edad_minima.errors?.['required']">
+                    La edad es obligatoria.
+                  </div>
+                  <div *ngIf="edad_minima.errors?.['min']">
+                    La edad mínima es de 0 años.
+                  </div>
+                  <div *ngIf="edad_minima.errors?.['max']">
+                    La edad máxima es de 18 años.
+                  </div>
+                </div>
               </div>
               <div class="row">
                 <div class="col-8">
@@ -243,101 +269,70 @@
                     <input formControlName="imagen"
                            type="text" class="form-control"
                            id="imagenZ" value="{{imagen}}"
-                           placeholder="imagen">
-                    <label for="imagenZ">
-                      imagen</label>
+                           placeholder="Imagen">
+                    <label for="imagenZ">Imagen</label>
                   </div>
-
                 </div>
                 <div class="col-4">
-                  <img src="{{imagen || 'assets/images/no-image-icon.jpg'}}"
-                       alt="...">
+                  <img src="{{imagen?.value || 'assets/images/Not_found.JPG'}}"  alt="...">
                 </div>
               </div>
-              <div class="form-floating mb-3 mt-3">
-<textarea formControlName="plot"
 
-          rows="7"
-          class="form-control"
-          id="plotZ" value="{{plot}}">
-
-</textarea>
-                <label for="plotZ">
-                  Plot</label>
-              </div>
-              <!-- select categoria -->
+              <!-- Seleccionar Categoria -->
               <div *ngIf="editar">
-                <label for="SelectZ">Genres</label>
-                <select class="form-select" id="SelectZ"
-                        aria-label="Genres" multiple
+                <label for="SelectZ">Categoria</label>
+                <select class="form-select" id="SelectZ" aria-label="Categoria"
                         formControlName="categoria">
-                  <option *ngFor="let gen of categoria"
-                          [value]="gen">
-                    {{gen}}</option>
+                  <option *ngFor="let cat of categoria" [value]="cat"> {{cat}}</option>
                 </select>
               </div>
               <div *ngIf="!editar">
-                <label for="newSelectZ">Genres</label>
+                <label for="newSelectZ">Categoria</label>
                 <select class="form-select" id="newSelectZ"
-                        aria-label="Genres" multiple
+                        aria-label="Categoria"
                         formControlName="categoria">
-                  <option *ngFor="let gen of categoria"
-                          [value]="gen">
-                    {{gen}}</option>
+                  <option *ngFor="let cat of categoria" [value]="cat">{{cat}}</option>
                 </select>
               </div>
 
-              <!-- Add New Genre -->
+              <!-- Añadir nueva Categoria -->
               <div class="row mt-3">
                 <div class="col-8">
                   <div [formGroup]="mynewCategoria" class="form-floating mb-3">
-                    <input
-                      type="text" class="form-control"
-                      id="newGenreZ"
-                      formControlName="newGenre"
-                      placeholder="New Genre">
-                    <label for="newGenreZ">
-                      New Genre</label>
+                    <input type="text" class="form-control" id="newCategoriaZ"
+                           formControlName="newCategoria"
+                           placeholder="New Categoria">
+                    <label for="newCategoriaZ">Nueva Categoria</label>
+                    <div *ngIf="newCategoria.invalid && (newCategoria.dirty || newCategoria.touched)"
+                         class="alert alert-warning"
+                         role="alert">
+                      <div *ngIf="newCategoria.errors?.['required'] || newCategoria.errors?.['notOnlyWhiteSpace']">
+                        El nombre es obligatorio.
+                      </div>
+                      <div *ngIf="newCategoria.errors?.['minlength']">
+                        Mínimo 2 carácteres
+                      </div>
+                      <div *ngIf="newCategoria.errors?.['maxlength']">
+                        Máximo 50 carácteres
+                      </div>
+                    </div>
                   </div>
-
                 </div>
                 <div class="col-4 pt-2">
-                  <h3>      <fa-icon [icon]="faCirclePlus" (click)="addNewCategoria(newCategoria)"></fa-icon>
-                  </h3>
-
+                  <h3><fa-icon [icon]="faCirclePlus" (click)="addNewCategoria(newCategoria?.value)"></fa-icon></h3>
                 </div>
               </div>
-
-              <fieldset formGroupName="imdb">
-                <legend>IMDB</legend>
-                <div class="form-floating mb-3">
-                  <input formControlName="rating"
-                         type="number" class="form-control"
-                         id="ratingZ" value="{{rating}}"
-                         placeholder="Rating">
-                  <label for="ratingZ">
-                    Rating</label>
-                </div>
-                <div class="form-floating mb-3">
-                  <input formControlName="votes"
-                         type="number" class="form-control"
-                         id="votesZ" value="{{votes}}"
-                         placeholder="Votes">
-                  <label for="votesZ">
-                    Votes</label>
-                </div>
-              </fieldset>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary"
-                      data-bs-dismiss="modal">Close</button>
+                      data-bs-dismiss="modal">Cerrar</button>
               <button type="submit" class="btn btn-primary"
-                      data-bs-dismiss="modal">Save changes</button>
+                      [disabled]="formJuguete.invalid"
+                      data-bs-dismiss="modal">Guardar Cambios</button>
             </div>
           </form>
         </div>
       </div>
     </div>
-
   </div>
 </div>
