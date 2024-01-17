@@ -148,9 +148,6 @@
                           aria-label="Categoria"
                           formControlName="categoria">
                     <option *ngFor="let cat of categoria" [value]="cat">{{cat}}</option>
-                    <div *ngIf="categoriaF.errors?.['required']">
-                      La categoria es obligatoria.
-                    </div>
                   </select>
                 </div>
 
