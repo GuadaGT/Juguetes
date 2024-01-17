@@ -65,6 +65,7 @@
                          id="nombre" value="{{nombre}}"
                          placeholder="Nombre">
                   <label for="nombre">Nombre</label>
+                  <!--se indica primero invalido, sucio(Se ha usado pero no se ha rellenado) o tocado para que el error de validación no salte al iniciar en sí el formulario-->
                   <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)"
                        class="alert alert-warning"
                        role="alert">
@@ -147,6 +148,9 @@
                           aria-label="Categoria"
                           formControlName="categoria">
                     <option *ngFor="let cat of categoria" [value]="cat">{{cat}}</option>
+                    <div *ngIf="categoriaF.errors?.['required']">
+                      La categoria es obligatoria.
+                    </div>
                   </select>
                 </div>
 

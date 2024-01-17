@@ -21,11 +21,11 @@ export class JugueteListComponent implements OnInit {
       nombre: ['', [Validators.minLength(1),
         Validators.required,
         FormValidators.notOnlyWhiteSpace]],
-      edad_minima: ['',[Validators.required,
+      edad_minima: [0,[Validators.required,
         Validators.min(0),
         Validators.max(18)
       ]],
-      precio: ['',[Validators.required,
+      precio: [0,[Validators.required,
         Validators.min(0)]],
       categoria: ['', [Validators.required,
         Validators.minLength(2),
@@ -36,7 +36,10 @@ export class JugueteListComponent implements OnInit {
   );
   mynewCategoria = new FormGroup(
     {
-      newCategoria: new FormControl('')
+      newCategoria: new FormControl('', [Validators.required,
+        Validators.minLength(2),
+        Validators.maxLength(50),
+        FormValidators.notOnlyWhiteSpace])
     }
   );
   categoria: string[] = [];
